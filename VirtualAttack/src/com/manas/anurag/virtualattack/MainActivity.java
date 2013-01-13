@@ -27,7 +27,7 @@ public class MainActivity extends Activity implements SensorEventListener, OnLoa
 	boolean loaded = true;
 	private float[] last_acc = new float[]{5,5,5};
 	private long last_loaded_time = System.currentTimeMillis();
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -74,7 +74,7 @@ public class MainActivity extends Activity implements SensorEventListener, OnLoa
 		}
 		return false;
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
