@@ -1,5 +1,7 @@
 package com.manas.anurag.virtualattack;
 
+import android.app.Activity;
+import android.content.res.AssetFileDescriptor;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -8,12 +10,14 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.media.SoundPool.OnLoadCompleteListener;
 import android.os.Bundle;
-import android.app.Activity;
-import android.content.res.AssetFileDescriptor;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.TextView;
+import java.util.Random;
+
 
 public class MainActivity extends Activity implements SensorEventListener, OnLoadCompleteListener{
 
@@ -27,6 +31,7 @@ public class MainActivity extends Activity implements SensorEventListener, OnLoa
 	boolean loaded = true;
 	private float[] last_acc = new float[]{5,5,5};
 	private long last_loaded_time = System.currentTimeMillis();
+	TextView textView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +45,9 @@ public class MainActivity extends Activity implements SensorEventListener, OnLoa
 		volume = (float) audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
 		sp = new SoundPool(1, AudioManager.STREAM_MUSIC,0);
 		sp.setOnLoadCompleteListener(this);
+		textView = (TextView) findViewById(R.id.content);
+		textView.setMovementMethod(new ScrollingMovementMethod());
+		textView.setText("Expression here");
 	}
 
 	public final void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -54,12 +62,33 @@ public class MainActivity extends Activity implements SensorEventListener, OnLoa
 				AssetFileDescriptor descriptor = getAssets().openFd(audio);
 				soundId = sp.load(descriptor, 1);
 				descriptor.close();
+				textView.setText(selectRandomText());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
 
+	private String selectRandomText(){
+		int number_of_strings=10;
+		String[] display_strings= new String[number_of_strings];
+		display_strings[0]="Hit harder!";
+		display_strings[1]="That surely hit!";
+		display_strings[2]="Smack!";
+		display_strings[3]="Swoosh";
+		display_strings[4]="Dont be gentle!";
+		display_strings[5]="Harshness!";
+		display_strings[6]="Aah!";
+		display_strings[7]="Bloody shot!";
+		display_strings[8]="Show who is the daddy";
+		display_strings[9]="You are the boss!";
+		
+		Random generator = new Random();
+		int random = generator.nextInt(number_of_strings);
+		return display_strings[random];
+		
+	}
+	
 	private boolean isJerk(float[] acc){
 		float magnitude = 0;
 		for(int i=0;i<3;i++){
